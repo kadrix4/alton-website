@@ -6,7 +6,16 @@ export default function Home() {
       {/* Header */}
       <header className="bg-blue-600 text-white p-4 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Alton</h1>
+          <div className="flex items-center">
+            <Image
+              src="https://via.placeholder.com/50?text=Alton" // Placeholder logo - replace with your real logo URL or file
+              alt="Alton Logo"
+              width={50}
+              height={50}
+              className="mr-2"
+            />
+            <h1 className="text-2xl font-bold">Alton</h1>
+          </div>
           <nav>
             <ul className="flex space-x-4">
               <li><a href="/" className="hover:underline">Home</a></li>
