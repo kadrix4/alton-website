@@ -1,31 +1,10 @@
-import Image from 'next/image';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-blue-600 text-white p-4 shadow-md">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center">
-            <Image
-              src="https://via.placeholder.com/50?text=Alton" // Placeholder logo - replace with your real logo URL or file
-              alt="Alton Logo"
-              width={50}
-              height={50}
-              className="mr-2"
-            />
-            <h1 className="text-2xl font-bold">Alton</h1>
-          </div>
-          <nav>
-            <ul className="flex space-x-4">
-              <li><a href="/" className="hover:underline">Home</a></li>
-              <li><a href="/services" className="hover:underline">Services</a></li>
-              <li><a href="/portfolio" className="hover:underline">Portfolio</a></li>
-              <li><a href="/contact" className="hover:underline">Contact</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section className="bg-blue-500 text-white py-20 text-center">
@@ -57,10 +36,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white p-4 text-center">
-        <p>&copy; 2025 SPEANRE. All rights reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 }
