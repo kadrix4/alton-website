@@ -1,6 +1,7 @@
 'use client'; // For interactivity
 
 import { useState } from 'react';
+import Image from 'next/image'; // Added import for Image component
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -67,6 +68,10 @@ export default function DesignAI() {
                 </div>
               </div>
             )}
+            {/* Added collab link here, after suggestions */}
+            <div className="text-center mt-6">
+              <a href="/collab" className="text-blue-600 hover:underline">Collaborate on Designs in Real-Time</a>
+            </div>
           </div>
         </div>
       </section>
