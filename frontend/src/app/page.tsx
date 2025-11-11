@@ -24,10 +24,10 @@ export default function Home() {
               <h4 className="text-xl font-semibold mb-2">Printing</h4>
               <p>Business cards, banners, flyers, and more with premium quality. <a href="/ar" className="text-blue-600 hover:underline">Preview in AR</a></p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h4 className="text-xl font-semibold mb-2">Branding</h4>
-              <p>Logo design, custom merchandise, and packaging solutions.</p>
-            </div>
+           <div className="bg-white p-6 rounded-lg shadow">
+  <h4 className="text-xl font-semibold mb-2">Branding</h4>
+  <p>Logo design, custom merchandise, and packaging solutions. <a href="/dashboard" className="text-blue-600 hover:underline">Get Personalized Recommendations</a></p>
+</div>
             <div className="bg-white p-6 rounded-lg shadow">
               <h4 className="text-xl font-semibold mb-2">Advanced Tools</h4>
               <p>AI design, AR previews, and more coming soon! <a href="/sustainability" className="text-blue-600 hover:underline">Try our Sustainability Calculator</a></p>
