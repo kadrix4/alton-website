@@ -1,6 +1,7 @@
-'use client'; // Add this for client-side interactivity
+'use client';
 
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -11,11 +12,40 @@ type QuoteFormData = {
 };
 
 export default function Quote() {
-  const { register, handleSubmit, formState: { errors } } = useForm<QuoteFormData>();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<QuoteFormData>();
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState('');
 
-  const onSubmit = (data: QuoteFormData) => {
-    console.log('Quote Request:', data); // For now, logs to browser console (F12 to see)
-    alert('Quote request submitted! (Check console for details)'); // Placeholder alert
+  const onSubmit = async (data: QuoteFormData) => {
+    setSubmitStatus('loading');
+    try {
+      const response = await fetch('http://localhost:5000/api/quotes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitStatus('success');
+        setMessage('Quote request submitted successfully! We will contact you soon.');
+        reset();
+        setTimeout(() => {
+          setSubmitStatus('idle');
+          setMessage('');
+        }, 5000);
+      } else {
+        setSubmitStatus('error');
+        setMessage('Failed to submit quote. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting quote:', error);
+      setSubmitStatus('error');
+      setMessage('Network error. Please check if the backend is running.');
+    }
   };
 
   return (
@@ -25,6 +55,13 @@ export default function Quote() {
       <section className="py-12">
         <div className="container mx-auto max-w-md">
           <h2 className="text-3xl font-bold text-center mb-8">Request a Quote</h2>
+          
+          {message && (
+            <div className={`mb-4 p-4 rounded ${submitStatus === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+              {message}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label htmlFor="service" className="block text-sm font-medium">Service Type</label>
@@ -70,9 +107,10 @@ export default function Quote() {
             </div>
             <button 
               type="submit" 
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
+              disabled={submitStatus === 'loading'}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full disabled:opacity-50"
             >
-              Submit Quote Request
+              {submitStatus === 'loading' ? 'Submitting...' : 'Submit Quote Request'}
             </button>
           </form>
         </div>
