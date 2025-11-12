@@ -1,6 +1,7 @@
-'use client'; // Add this for client-side interactivity
+'use client';
 
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -11,11 +12,40 @@ type ContactFormData = {
 };
 
 export default function Contact() {
-  const { register, handleSubmit, formState: { errors } } = useForm<ContactFormData>();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactFormData>();
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [statusMessage, setStatusMessage] = useState('');
 
-  const onSubmit = (data: ContactFormData) => {
-    console.log('Contact Message:', data); // Logs to console
-    alert('Message sent! (Check console for details)'); // Placeholder
+  const onSubmit = async (data: ContactFormData) => {
+    setSubmitStatus('loading');
+    try {
+      const response = await fetch('http://localhost:5000/api/contacts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitStatus('success');
+        setStatusMessage('Message sent successfully! We will get back to you soon.');
+        reset();
+        setTimeout(() => {
+          setSubmitStatus('idle');
+          setStatusMessage('');
+        }, 5000);
+      } else {
+        setSubmitStatus('error');
+        setStatusMessage('Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting contact:', error);
+      setSubmitStatus('error');
+      setStatusMessage('Network error. Please check if the backend is running.');
+    }
   };
 
   return (
@@ -25,6 +55,13 @@ export default function Contact() {
       <section className="py-12">
         <div className="container mx-auto max-w-md">
           <h2 className="text-3xl font-bold text-center mb-8">Contact Us</h2>
+          
+          {statusMessage && (
+            <div className={`mb-4 p-4 rounded ${submitStatus === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+              {statusMessage}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium">Name</label>
@@ -67,9 +104,10 @@ export default function Contact() {
             </div>
             <button 
               type="submit" 
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
+              disabled={submitStatus === 'loading'}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full disabled:opacity-50"
             >
-              Send Message
+              {submitStatus === 'loading' ? 'Sending...' : 'Send Message'}
             </button>
           </form>
         </div>
